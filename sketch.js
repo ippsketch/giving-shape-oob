@@ -20,12 +20,14 @@ trish=(x,y,s1,s2)=>{gr.beginShape();for(let i=0;i<x.length;i++)gr.vertex(s1*x[i]
 
 let saved = false;
 let lastTap = 0;
+
 function doubleTap() {
   if (saved || doneflag==false) {
     return;
   }  
   saved = true;
-  save();
+  // save();
+  saveToCameraRoll();
 }
 
 // For mobile devices
@@ -38,3 +40,24 @@ function touchStarted() {
     lastTap = currentTime;
   }
 }
+
+function saveToCameraRoll() {
+  let imgData = canvas.toDataURL(); // Get the data URL of the canvas
+  
+  // Create an invisible image element
+  let img = createImg(imgData);
+  img.hide(); // Hide the image
+  
+  // Create an invisible link element
+  let link = createElement('a');
+  link.attribute('download', 'GivingShapeOOB.png');
+  link.attribute('href', imgData);
+  
+  // Trigger a click event on the link element
+  link.elt.click();
+  
+  // Clean up
+  link.remove();
+  img.remove();
+}
+
