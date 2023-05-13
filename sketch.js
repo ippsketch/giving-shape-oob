@@ -27,7 +27,7 @@ function doubleTap() {
     return;
   }  
   saved = true;
-  save();
+  save('GivingShapeOOB_'+hash+'.png');
 }
 
 // For mobile devices
