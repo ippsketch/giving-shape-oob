@@ -27,10 +27,10 @@ function touchMoved() {
   const touchCurrentY = touches[0].y;
   const swipeDistance = touchCurrentY - touchStartY;
 
-  if (swipeDistance >= height / 2) {
+  if (swipeDistance <= -height / 2) {
     isSwiping = true;
   }
-  if (swipeDistance <= -height / 2) {
+  if (swipeDistance >= height / 2) {
     location.reload();
   }
 }
