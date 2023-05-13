@@ -18,17 +18,23 @@ if(fc==item.length*2){dtg(px,py,gw,gh,colB);noStroke();for(let i=0;i<10000;i++){
 
 trish=(x,y,s1,s2)=>{gr.beginShape();for(let i=0;i<x.length;i++)gr.vertex(s1*x[i],s1*y[i]);if(s2>0)for(let i=x.length-1;i>=0;i--)gr.vertex(x[i]*s2,y[i]*s2);gr.endShape();};hexsh=(r,ao,s1,s2)=>{gr.push();gr.rotate(ao);gr.beginShape();gr.vertex(-s1*r*s3/2,0);for(let a=0;a<3;a++)gr.vertex(-s1*r*cos(a*PI/3+PI/6),s1*r*sin(a*PI/3+PI/6));gr.vertex(s1*r*s3/2,0);if(s2>0){gr.vertex(s2*r*s3/2,0);for(let a=2;a>=0;a--)gr.vertex(-s2*r*cos(a*PI/3+PI/6),s2*r*sin(a*PI/3+PI/6));gr.vertex(-s2*r*s3/2,0);}gr.endShape(CLOSE);gr.pop();};arcsh=(r,a1,a2,s1,s2)=>{gr.push();if(s2>0){gr.noFill();gr.strokeWeight(s1*r/2-s2*r/2);r=(r*s1+s2*r)/2;} else r=s1*r;gr.arc(0,0,r,r,a1,a2);gr.pop();};hexagon=(r)=>{beginShape();for(let a=0;a<6;a++)vertex(r*sin(a*PI/3),r*cos(a*PI/3));endShape(CLOSE);};dtg=(px,py,gw,gh,col)=>{noFill();for(let j=-5;j<Ny/Nm+5;j+=1){for(let i=-5;i<Nx/Nm+5;i+=1){let dir=((j+i+pSO)%2),xt=px+i*gw*Nm+gh*s3/(dir?3:6)*Nm,yt=py+j*gh/2*Nm,tb=(j==0)?1:(j==Ny-1)?2:0;push();translate(xt,yt);rotate(PI*(!dir));if(tb==0)rotate(2*PI/3*(R(3)|0));stroke(...col,R(.25));strokeWeight(.5*p);let th=gh*Nm;triangle(-s3/3*th,0,s3/6*th,-th/2,s3/6*th,th/2);pop();}}};createGradient=(p,ang,col)=>{let x1=cos(ang)*p[0]-sin(ang)*p[1],y1=sin(ang)*p[0]+cos(ang)*p[1],x2=cos(ang)*p[2]-sin(ang)*p[3],y2=sin(ang)*p[2]+cos(ang)*p[3],gd=gr.drawingContext.createLinearGradient(x1,y1,x2,y2);gd.addColorStop(0.0,color(0,0,0,1));gd.addColorStop(0.5,color(...col,1));gd.addColorStop(1.0,color(0,0,100,1));gr.drawingContext.fillStyle=gd;gr.drawingContext.strokeStyle=gd;};outline=(xp,yp,dd)=>{for(let i=0;i<xp.length;i++){xp[i]=xp[i]+RT(dd*pL2);yp[i]=yp[i]+RT(dd*pL2);}xp.push(xp[0]);yp.push(yp[0]);push();scale(1+RT(pL3));strokeWeight(R(.75*p));stroke(...RV([colF,colF]),R(.4));for(let i=0;i<xp.length;i++){let p1=-R(pL1)*R(),p2=1+R(pL1)*R();line(M(p1,xp[i],xp[i+1]),(M(p1,yp[i],yp[i+1])),M(p2,xp[i],xp[i+1]),(M(p2,yp[i],yp[i+1])));}pop();};outlinec=(r,a1,a2)=>{push();translate(RT(r*pL2),RT(r*pL2));scale(1-R(pL3));strokeWeight(R(.75*p));stroke(...RV([colF,colF]),R(.4));arc(0,0,r,r,a1+RT(.1),a2+RT(.1));pop();}
 
-
-let saved=false;
-function doubleClicked() {
-  if (saved) {
+let saved = false;
+let lastTap = 0;
+function doubleTap() {
+  if (saved || doneflag==false) {
     return;
-  }
+  }  
+  saved = true;
+  save();
+}
+
+// For mobile devices
+function touchStarted() {
+  let currentTime = millis();
   
-  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height && doneflag==true) {
-    saved = true;
-    save();
+  if (currentTime - lastTap < 300) {
+    doubleTap();
+  } else {
+    lastTap = currentTime;
   }
-  
-  return false;
 }
